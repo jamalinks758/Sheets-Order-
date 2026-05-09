@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sweet Layers Bakery — Order your custom cake in 4 steps. Every order is automatically logged and confirmed on WhatsApp.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:title" content="Sweet Layers — Smart Order System">
+  <meta property="og:description" content="Custom cakes for every occasion. Order in 4 simple steps — tracked automatically.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#3D1C02">
+
+  <title>Sweet Layers — Smart Order System | Built by JAMALINKS</title>
+
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Fonts (deferred) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </noscript>
+
+  <!-- Font Awesome 6 (deferred) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  </noscript>
+
+  <!-- AOS (scroll animations) -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════════════════
+       JAMALINKS — Sweet Layers Smart Order System
+       Google Sheets Integration Build
+       font-display: swap applied globally
+    ══════════════════════════════════════════════════ */
+
+    :root {
+      /* Light Mode */
+      --bg:          #FDF6EC;
+      --bg-card:     #FFFBF5;
+      --bg-input:    #FFFFFF;
+      --text:        #2C1810;
+      --text-mid:    #6B3A1F;
+      --text-light:  #A07050;
+      --border:      rgba(61, 28, 2, 0.14);
+      --shadow:      0 4px 20px rgba(61, 28, 2, 0.09);
+      --shadow-lg:   0 16px 56px rgba(61, 28, 2, 0.14);
+      --nav-bg:      rgba(253, 246, 236, 0.95);
+
+      /* Brand */
+      --chocolate:   #3D1C02;
+      --brown:       #6B3A1F;
+      --terracotta:  #C4622D;
+      --gold:        #C9922A;
+      --gold-light:  #F5D78E;
+      --peach:       #FFE8D6;
+      --success:     #2F6B45;
+      --success-bg:  #EAF5EE;
+    }
+
+    [data-theme="dark"] {
+      --bg:         #130900;
+      --bg-card:    #1F0E06;
+      --bg-input:   #2A1409;
+      --text:       #F2E4CC;
+      --text-mid:   #C5A070;
+      --text-light: #7A5535;
+      --border:     rgba(201, 146, 42, 0.18);
+      --shadow:     0 4px 20px rgba(0,0,0,0.45);
+      --shadow-lg:  0 16px 56px rgba(0,0,0,0.55);
+      --nav-bg:     rgba(19, 9, 0, 0.97);
+      --success-bg: rgba(47,107,69,0.14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', 'Segoe UI', sans-serif;
+      font-display: swap;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-display: swap;
+    }
+
+    /* ─── SKIP LINK (Accessibility) ─── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0.5rem;
+      background: var(--chocolate);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0 0 8px 8px;
+      text-decoration: none;
+      font-weight: 700;
+      z-index: 9999;
+      font-family: 'Nunito', sans-serif;
+    }
+    .skip-link:focus { left: 1rem; }
+
+    /* ─── DEMO BANNER ─── */
+    .demo-banner {
+      background: linear-gradient(90deg, var(--chocolate), var(--brown));
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 0.45rem 1rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .demo-banner strong { color: var(--gold-light); }
+
+    /* ─── NAVBAR ─── */
+    .navbar {
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: background 0.3s ease;
+    }
+
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--chocolate) !important;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    [data-theme="dark"] .navbar-brand { color: var(--gold-light) !important; }
+
+    .brand-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle {
+      background: var(--peach);
+      border: 1.5px solid var(--border);
+      color: var(--text-mid);
+      border-radius: 50px;
+      padding: 0.38rem 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .theme-toggle:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+    [data-theme="dark"] .theme-toggle { background: var(--bg-card); }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 4.5rem 0 3.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(201,146,42,0.11) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(196,98,45,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--peach);
+      border: 1px solid rgba(201,146,42,0.35);
+      color: var(--terracotta);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      margin-bottom: 1.5rem;
+    }
+    [data-theme="dark"] .hero-badge {
+      background: rgba(201,146,42,0.12);
+      color: var(--gold-light);
+      border-color: rgba(201,146,42,0.25);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 700;
+      color: var(--chocolate);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    [data-theme="dark"] .hero h1 { color: var(--gold-light); }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+    [data-theme="dark"] .hero h1 em { color: var(--gold); }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--text-mid);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    .sheets-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--success-bg);
+      border: 1px solid rgba(47,107,69,0.28);
+      color: var(--success);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 0.38rem 1rem;
+      border-radius: 50px;
+      margin-top: 0.75rem;
+    }
+    [data-theme="dark"] .sheets-badge {
+      background: rgba(47,107,69,0.14);
+      color: #7EC8A0;
+      border-color: rgba(47,107,69,0.28);
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--terracotta), #A84020);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 0.9rem 2.2rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      letter-spacing: 0.02em;
+    }
+    .hero-cta:hover {
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(196,98,45,0.38);
+    }
+
+    /* ─── FORM SECTION ─── */
+    #order-section { padding: 1rem 0 5rem; }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 0.6rem;
+    }
+    .section-eyebrow::before, .section-eyebrow::after {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── ORDER CARD ─── */
+    .order-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* ─── STEP HEADER ─── */
+    .step-header {
+      background: linear-gradient(140deg, var(--chocolate) 0%, #5A2A0E 100%);
+      padding: 1.4rem 1.5rem 1.1rem;
+    }
+    [data-theme="dark"] .step-header {
+      background: linear-gradient(140deg, #0D0500, #1A0B04);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-label-sm {
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.7rem;
+    }
+
+    .step-indicators {
+      display: flex;
+      align-items: center;
+    }
+
+    .step-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .step-dot.active {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: #fff;
+    }
+    .step-dot.completed {
+      border-color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: rgba(255,255,255,0.12);
+      transition: background 0.3s ease;
+      margin: 0 2px;
+    }
+    .step-line.completed { background: rgba(255,255,255,0.45); }
+
+    .step-title-txt {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 600;
+      margin-top: 0.7rem;
+      margin-bottom: 0.1rem;
+    }
+    .step-subtitle-txt {
+      font-size: 0.76rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ─── FORM BODY ─── */
+    .form-body {
+      padding: 1.6rem 1.4rem 1.8rem;
+    }
+    @media (min-width: 480px) { .form-body { padding: 1.8rem 1.8rem 2rem; } }
+
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    /* ─── INPUTS ─── */
+    .form-label {
+      font-weight: 700;
+      font-size: 0.83rem;
+      color: var(--text-mid);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+      display: block;
+    }
+
+    .form-control {
+      background: var(--bg-input);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 0.78rem 1rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.93rem;
+      width: 100%;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .form-control:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,146,42,0.14);
+      background: var(--bg-input);
+      color: var(--text);
+      outline: none;
+    }
+    .form-control::placeholder { color: var(--text-light); }
+    .form-control.has-error { border-color: #C0392B; }
+
+    textarea.form-control { resize: vertical; min-height: 85px; }
+
+    /* ─── OPTION CARD GRIDS ─── */
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.55rem;
+    }
+    @media (min-width: 400px) { .option-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .flavour-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.55rem;
+    }
+
+    .option-card { position: relative; cursor: pointer; }
+    .option-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .option-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.85rem 0.5rem;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-input);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      gap: 0.25rem;
+      min-height: 72px;
+      user-select: none;
+    }
+    .option-label:hover {
+      border-color: var(--gold);
+      background: rgba(201,146,42,0.06);
+    }
+    .option-card input:checked + .option-label {
+      border-color: var(--gold);
+      background: rgba(201,146,42,0.11);
+      box-shadow: 0 0 0 2px rgba(201,146,42,0.18);
+    }
+
+    .option-icon { font-size: 1.35rem; line-height: 1; }
+    .option-text {
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: var(--text-mid);
+      line-height: 1.25;
+    }
+    .option-card input:checked + .option-label .option-text { color: var(--gold); }
+
+    /* Flavour variant (horizontal) */
+    .flavour-label {
+      flex-direction: row;
+      justify-content: flex-start;
+      text-align: left;
+      padding: 0.7rem 0.85rem;
+      min-height: auto;
+      gap: 0.55rem;
+    }
+    .flavour-label .option-text { font-size: 0.8rem; }
+
+    /* ─── REVIEW SUMMARY ─── */
+    .review-summary {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.15rem;
+      margin-bottom: 1.1rem;
+    }
+    .review-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.42rem 0;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-key {
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .review-value {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: right;
+    }
+
+    .order-ref-tag {
+      background: linear-gradient(135deg, var(--chocolate), var(--brown));
+      color: var(--gold-light);
+      border-radius: 6px;
+      padding: 0.18rem 0.55rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ─── LOGGING NOTICE ─── */
+    .logging-notice {
+      background: var(--success-bg);
+      border: 1px solid rgba(47,107,69,0.2);
+      border-radius: 10px;
+      padding: 0.65rem 0.9rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      margin-bottom: 1rem;
+      font-size: 0.77rem;
+      color: var(--success);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    [data-theme="dark"] .logging-notice { color: #7EC8A0; }
+    .logging-notice i { margin-top: 3px; flex-shrink: 0; }
+
+    /* ─── VALIDATION ERRORS ─── */
+    .field-error {
+      font-size: 0.75rem;
+      color: #C0392B;
+      font-weight: 600;
+      margin-top: 0.3rem;
+      display: none;
+    }
+    .field-error.show { display: block; }
+
+    /* ─── BUTTONS ─── */
+    .btn-next {
+      background: linear-gradient(135deg, var(--terracotta), #9E3A17);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 0.82rem 1.8rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      flex: 1;
+      letter-spacing: 0.02em;
+    }
+    .btn-next:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 22px rgba(196,98,45,0.35);
+    }
+    .btn-next:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .btn-submit-order {
+      background: linear-gradient(135deg, var(--success), #1F5230);
+    }
+    .btn-submit-order:hover:not(:disabled) {
+      box-shadow: 0 7px 22px rgba(47,107,69,0.38);
+    }
+
+    .btn-back {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text-mid);
+      border-radius: 50px;
+      padding: 0.78rem 1.2rem;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .btn-back:hover {
+      border-color: var(--text-mid);
+      background: var(--bg);
+    }
+
+    .form-nav {
+      display: flex;
+      gap: 0.7rem;
+      margin-top: 1.4rem;
+      align-items: center;
+    }
+
+    /* ─── LOADING OVERLAY ─── */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 5, 0, 0.88);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .loading-overlay.active { display: flex; }
+
+    .loader-ring {
+      width: 56px;
+      height: 56px;
+      border: 4px solid rgba(201,146,42,0.25);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-main-txt {
+      color: rgba(255,255,255,0.9);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .loading-sub-txt {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.78rem;
+      margin-top: -0.65rem;
+    }
+
+    /* ─── SUCCESS SCREEN ─── */
+    #success-screen { display: none; padding: 2rem 0 5rem; }
+
+    .success-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      max-width: 560px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .success-header {
+      background: linear-gradient(140deg, var(--success), #1F5230);
+      padding: 2rem 1.5rem 1.8rem;
+      text-align: center;
+    }
+
+    .success-icon-ring {
+      width: 68px;
+      height: 68px;
+      border: 3px solid rgba(255,255,255,0.35);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.8rem;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .success-h { font-size: 1.35rem; color: #fff; font-weight: 700; margin-bottom: 0.3rem; }
+    .success-p { color: rgba(255,255,255,0.7); font-size: 0.83rem; }
+
+    .success-body { padding: 1.6rem 1.4rem; }
+    @media (min-width: 480px) { .success-body { padding: 1.8rem 1.8rem; } }
+
+    /* Sheets confirmation block */
+    .sheets-confirm {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--success-bg);
+      border: 1px solid rgba(47,107,69,0.22);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 1.2rem;
+    }
+    [data-theme="dark"] .sheets-confirm { background: rgba(47,107,69,0.12); }
+
+    .sheets-icon-box {
+      width: 38px;
+      height: 38px;
+      background: var(--success);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+
+    .sheets-confirm-main {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--success);
+      line-height: 1.3;
+    }
+    [data-theme="dark"] .sheets-confirm-main { color: #7EC8A0; }
+
+    .sheets-confirm-sub {
+      display: block;
+      font-size: 0.73rem;
+      font-weight: 400;
+      color: var(--text-light);
+      margin-top: 0.15rem;
+    }
+
+    /* WhatsApp countdown */
+    .wa-countdown-btn {
+      background: linear-gradient(135deg, #25D366, #108B42);
+      border-radius: 14px;
+      padding: 1.1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .wa-countdown-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.38);
+    }
+    .wa-icon-xl { font-size: 2rem; color: #fff; flex-shrink: 0; }
+    .wa-cd-text { flex: 1; }
+    .wa-cd-title { color: #fff; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.15rem; }
+    .wa-cd-sub { color: rgba(255,255,255,0.72); font-size: 0.77rem; }
+
+    .cd-bubble {
+      width: 42px;
+      height: 42px;
+      border: 2px solid rgba(255,255,255,0.45);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    /* ─── WHATSAPP FLOAT ─── */
+    .wa-float {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 800;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(37,211,102,0.45);
+      animation: waPulse 2.8s ease-in-out infinite;
+      transition: transform 0.2s ease;
+    }
+    .wa-float:hover { transform: scale(1.1); color: #fff; animation: none; }
+    @keyframes waPulse {
+      0%,100% { box-shadow: 0 4px 18px rgba(37,211,102,0.45); }
+      50%      { box-shadow: 0 4px 30px rgba(37,211,102,0.72); }
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--chocolate);
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      padding: 1.4rem 1rem;
+      font-size: 0.76rem;
+    }
+    [data-theme="dark"] footer { background: #0A0300; }
+    footer a { color: var(--gold-light); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    footer p + p { margin-top: 0.35rem; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 360px) {
+      .option-grid,
+      .flavour-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-body { padding: 1.2rem 1rem; }
+    }
+
+    /* AOS */
+    [data-aos] { pointer-events: none; }
+    [data-aos].aos-animate { pointer-events: auto; }
+  </style>
+</head>
+
+<body>
+
+<a href="#order-section" class="skip-link">Skip to order form</a>
+
+<!-- DEMO BANNER -->
+<div class="demo-banner" role="note" aria-label="This is a JAMALINKS demo page">
+  🎯 <strong>JAMALINKS DEMO</strong> — Google Sheets Auto-Logging · Live WhatsApp Routing
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="navbar-brand" href="#" aria-label="Sweet Layers Bakery">
+      🎂 <span>Sweet Layers</span>
+      <span class="brand-dot" aria-hidden="true"></span>
+    </a>
+    <button
+      class="theme-toggle"
+      id="themeToggle"
+      aria-label="Toggle colour theme"
+      type="button"
+    >
+      <i class="fa-regular fa-moon" aria-hidden="true" id="themeIcon"></i>
+      <span id="themeLabel">Dark</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main id="main-content" role="main">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container">
+
+      <div data-aos="fade-down" data-aos-duration="550">
+        <div class="hero-badge" aria-hidden="true">
+          <i class="fa-solid fa-star" aria-hidden="true"></i>
+          Custom Cakes · Made to Order · Saint Lucia
+        </div>
+      </div>
+
+      <h1 id="hero-heading" data-aos="fade-up" data-aos-duration="650" data-aos-delay="80">
+        Every Occasion Deserves<br>
+        <em>a Layer of Love.</em>
+      </h1>
+
+      <p class="hero-sub" data-aos="fade-up" data-aos-duration="600" data-aos-delay="180">
+        Order your custom cake in 4 simple steps. Your order is tracked automatically — then we confirm everything on WhatsApp.
+      </p>
+
+      <div data-aos="fade-up" data-aos-delay="260">
+        <a href="#order-section" class="hero-cta" aria-label="Start your cake order">
+          🎂 Build Your Cake
+          <i class="fa-solid fa-arrow-down" aria-hidden="true" style="font-size:0.85em;"></i>
+        </a>
+      </div>
+
+      <div data-aos="fade-up" data-aos-delay="360">
+        <span class="sheets-badge" aria-label="Orders are automatically tracked">
+          <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+          Orders Auto-Logged · No Order Ever Lost
+        </span>
+      </div>
+
+    </div>
+  </section>
+  <!-- /HERO -->
+
+  <!-- ORDER FORM SECTION -->
+  <section id="order-section" aria-labelledby="form-section-heading">
+    <div class="container">
+
+      <div class="text-center mb-4" data-aos="fade-up">
+        <div class="section-eyebrow" aria-hidden="true">Your Order</div>
+        <h2 id="form-section-heading" style="font-size:1.7rem; color:var(--chocolate);">
+          Build Your Dream Cake
+        </h2>
+        <p style="color:var(--text-light); font-size:0.86rem; margin-top:0.25rem;">
+          4 steps · Specs go to your order tracker &amp; WhatsApp instantly
+        </p>
+      </div>
+
+      <div data-aos="fade-up" data-aos-delay="80">
+
+        <!-- ═══ ORDER CARD ═══ -->
+        <div class="order-card" role="region" aria-label="Cake order form">
+
+          <!-- STEP HEADER -->
+          <div class="step-header" aria-live="polite" aria-atomic="true" id="stepHeaderRegion">
+            <div class="step-label-sm">Your Progress</div>
+            <div class="step-indicators" role="list" aria-label="Form steps">
+              <div class="step-dot active" id="dot-1" role="listitem" aria-current="step" aria-label="Step 1: Your Details — current step">1</div>
+              <div class="step-line"  id="line-1" aria-hidden="true"></div>
+              <div class="step-dot"   id="dot-2" role="listitem" aria-label="Step 2: Occasion">2</div>
+              <div class="step-line"  id="line-2" aria-hidden="true"></div>
+              <div class="step-dot"   id="dot-3" role="listitem" aria-label="Step 3: Cake Details">3</div>
+              <div class="step-line"  id="line-3" aria-hidden="true"></div>
+              <div class="step-dot"   id="dot-4" role="listitem" aria-label="Step 4: Review and Submit">4</div>
+            </div>
+            <div class="step-title-txt" id="stepTitle">Your Details</div>
+            <div class="step-subtitle-txt" id="stepSubtitle">Step 1 of 4 · Tell us who's ordering</div>
+          </div>
+
+          <!-- FORM BODY -->
+          <div class="form-body">
+
+            <!-- ─── STEP 1: Customer Info ─── -->
+            <div class="step-panel active" id="panel-1" role="group" aria-labelledby="s1label">
+              <span id="s1label" class="visually-hidden">Step 1: Your contact details</span>
+
+              <div class="mb-3">
+                <label class="form-label" for="customerName">
+                  Full Name <span aria-hidden="true" style="color:var(--terracotta);">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="customerName"
+                  placeholder="e.g. Sarah Williams"
+                  autocomplete="name"
+                  required
+                  aria-required="true"
+                  aria-describedby="nameErr"
+                >
+                <div class="field-error" id="nameErr" role="alert" aria-live="assertive">
+                  <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Please enter your full name.
+                </div>
+              </div>
+
+              <div class="mb-2">
+                <label class="form-label" for="customerPhone">
+                  WhatsApp Number <span aria-hidden="true" style="color:var(--terracotta);">*</span>
+                </label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="customerPhone"
+                  placeholder="e.g. +1 758 285 1234"
+                  autocomplete="tel"
+                  required
+                  aria-required="true"
+                  aria-describedby="phoneErr phoneHint"
+                >
+                <div class="field-error" id="phoneErr" role="alert" aria-live="assertive">
+                  <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Please enter a valid number.
+                </div>
+                <div id="phoneHint" style="font-size:0.73rem; color:var(--text-light); margin-top:0.3rem;">
+                  <i class="fab fa-whatsapp" aria-hidden="true"></i> We'll confirm your order here
+                </div>
+              </div>
+
+              <div class="form-nav">
+                <button
+                  type="button"
+                  class="btn-next"
+                  onclick="nextStep(1)"
+                  aria-label="Continue to step 2: Choose occasion"
+                >
+                  Next: Occasion <i class="fa-solid fa-arrow-right ms-1" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /STEP 1 -->
+
+            <!-- ─── STEP 2: Occasion ─── -->
+            <div class="step-panel" id="panel-2" role="group" aria-labelledby="s2label">
+              <span id="s2label" class="visually-hidden">Step 2: Choose your occasion</span>
+
+              <label class="form-label mb-2">
+                What are we celebrating?
+                <span aria-hidden="true" style="color:var(--terracotta);">*</span>
+              </label>
+
+              <div class="option-grid" role="radiogroup" aria-label="Choose occasion" aria-required="true">
+                <div class="option-card">
+                  <input type="radio" name="occasion" id="occ-bday" value="Birthday">
+                  <label class="option-label" for="occ-bday">
+                    <span class="option-icon" aria-hidden="true">🎂</span>
+                    <span class="option-text">Birthday</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="occasion" id="occ-wed" value="Wedding">
+                  <label class="option-label" for="occ-wed">
+                    <span class="option-icon" aria-hidden="true">💍</span>
+                    <span class="option-text">Wedding</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="occasion" id="occ-ann" value="Anniversary">
+                  <label class="option-label" for="occ-ann">
+                    <span class="option-icon" aria-hidden="true">💕</span>
+                    <span class="option-text">Anniversary</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="occasion" id="occ-baby" value="Baby Shower">
+                  <label class="option-label" for="occ-baby">
+                    <span class="option-icon" aria-hidden="true">👶</span>
+                    <span class="option-text">Baby Shower</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="occasion" id="occ-corp" value="Corporate Event">
+                  <label class="option-label" for="occ-corp">
+                    <span class="option-icon" aria-hidden="true">🏢</span>
+                    <span class="option-text">Corporate</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="occasion" id="occ-other" value="Other">
+                  <label class="option-label" for="occ-other">
+                    <span class="option-icon" aria-hidden="true">✨</span>
+                    <span class="option-text">Other</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-error" id="occErr" role="alert" aria-live="assertive" style="margin-top:0.5rem;">
+                <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Please choose an occasion.
+              </div>
+
+              <div class="form-nav">
+                <button type="button" class="btn-back" onclick="prevStep(2)" aria-label="Back to step 1">
+                  <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back
+                </button>
+                <button type="button" class="btn-next" onclick="nextStep(2)" aria-label="Continue to step 3: Cake details">
+                  Next: Cake Details <i class="fa-solid fa-arrow-right ms-1" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /STEP 2 -->
+
+            <!-- ─── STEP 3: Size + Flavour ─── -->
+            <div class="step-panel" id="panel-3" role="group" aria-labelledby="s3label">
+              <span id="s3label" class="visually-hidden">Step 3: Choose size and flavour</span>
+
+              <label class="form-label mb-2">
+                Cake size <span aria-hidden="true" style="color:var(--terracotta);">*</span>
+              </label>
+
+              <div class="option-grid" role="radiogroup" aria-label="Choose cake size" aria-required="true">
+                <div class="option-card">
+                  <input type="radio" name="size" id="sz-6" value='6" Round (8–10 people)'>
+                  <label class="option-label" for="sz-6">
+                    <span class="option-icon" aria-hidden="true">🎂</span>
+                    <span class="option-text">6" Round<br><small style="font-weight:400">8–10 people</small></span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="size" id="sz-8" value='8" Round (12–16 people)'>
+                  <label class="option-label" for="sz-8">
+                    <span class="option-icon" aria-hidden="true">🎂</span>
+                    <span class="option-text">8" Round<br><small style="font-weight:400">12–16 people</small></span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="size" id="sz-10" value='10" Round (20–25 people)'>
+                  <label class="option-label" for="sz-10">
+                    <span class="option-icon" aria-hidden="true">🎂</span>
+                    <span class="option-text">10" Round<br><small style="font-weight:400">20–25 people</small></span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="size" id="sz-tiered" value="2-Tier (30–40 people)">
+                  <label class="option-label" for="sz-tiered">
+                    <span class="option-icon" aria-hidden="true">🎉</span>
+                    <span class="option-text">2-Tier<br><small style="font-weight:400">30–40 people</small></span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="size" id="sz-cups" value="Cupcakes (per dozen)">
+                  <label class="option-label" for="sz-cups">
+                    <span class="option-icon" aria-hidden="true">🧁</span>
+                    <span class="option-text">Cupcakes<br><small style="font-weight:400">Per dozen</small></span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="size" id="sz-custom" value="Custom Size">
+                  <label class="option-label" for="sz-custom">
+                    <span class="option-icon" aria-hidden="true">📐</span>
+                    <span class="option-text">Custom<br><small style="font-weight:400">We'll discuss</small></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-error" id="sizeErr" role="alert" aria-live="assertive" style="margin-top:0.4rem;">
+                <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Please choose a size.
+              </div>
+
+              <label class="form-label mb-2 mt-4">
+                Flavour <span aria-hidden="true" style="color:var(--terracotta);">*</span>
+              </label>
+
+              <div class="flavour-grid" role="radiogroup" aria-label="Choose cake flavour" aria-required="true">
+                <div class="option-card">
+                  <input type="radio" name="flavour" id="fl-van" value="Vanilla">
+                  <label class="option-label flavour-label" for="fl-van">
+                    <span class="option-icon" aria-hidden="true">🍦</span>
+                    <span class="option-text">Vanilla</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="flavour" id="fl-choc" value="Chocolate">
+                  <label class="option-label flavour-label" for="fl-choc">
+                    <span class="option-icon" aria-hidden="true">🍫</span>
+                    <span class="option-text">Chocolate</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="flavour" id="fl-rv" value="Red Velvet">
+                  <label class="option-label flavour-label" for="fl-rv">
+                    <span class="option-icon" aria-hidden="true">🔴</span>
+                    <span class="option-text">Red Velvet</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="flavour" id="fl-lem" value="Lemon">
+                  <label class="option-label flavour-label" for="fl-lem">
+                    <span class="option-icon" aria-hidden="true">🍋</span>
+                    <span class="option-text">Lemon</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="flavour" id="fl-carr" value="Carrot">
+                  <label class="option-label flavour-label" for="fl-carr">
+                    <span class="option-icon" aria-hidden="true">🥕</span>
+                    <span class="option-text">Carrot</span>
+                  </label>
+                </div>
+                <div class="option-card">
+                  <input type="radio" name="flavour" id="fl-cust" value="Custom Flavour">
+                  <label class="option-label flavour-label" for="fl-cust">
+                    <span class="option-icon" aria-hidden="true">✨</span>
+                    <span class="option-text">Custom</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field-error" id="flvErr" role="alert" aria-live="assertive" style="margin-top:0.4rem;">
+                <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> Please choose a flavour.
+              </div>
+
+              <div class="form-nav">
+                <button type="button" class="btn-back" onclick="prevStep(3)" aria-label="Back to step 2">
+                  <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back
+                </button>
+                <button type="button" class="btn-next" onclick="nextStep(3)" aria-label="Continue to review your order">
+                  Review Order <i class="fa-solid fa-arrow-right ms-1" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /STEP 3 -->
+
+            <!-- ─── STEP 4: Review & Submit ─── -->
+            <div class="step-panel" id="panel-4" role="group" aria-labelledby="s4label">
+              <span id="s4label" class="visually-hidden">Step 4: Review and submit your order</span>
+
+              <!-- Order summary -->
+              <div class="review-summary" role="region" aria-label="Your order summary">
+                <div class="review-row">
+                  <span class="review-key">Order Ref</span>
+                  <span class="review-value">
+                    <span class="order-ref-tag" id="displayRef" aria-label="Order reference">SL-XXXXXX</span>
+                  </span>
+                </div>
+                <div class="review-row">
+                  <span class="review-key">Name</span>
+                  <span class="review-value" id="rvName">—</span>
+                </div>
+                <div class="review-row">
+                  <span class="review-key">WhatsApp</span>
+                  <span class="review-value" id="rvPhone">—</span>
+                </div>
+                <div class="review-row">
+                  <span class="review-key">Occasion</span>
+                  <span class="review-value" id="rvOcc">—</span>
+                </div>
+                <div class="review-row">
+                  <span class="review-key">Size</span>
+                  <span class="review-value" id="rvSize">—</span>
+                </div>
+                <div class="review-row">
+                  <span class="review-key">Flavour</span>
+                  <span class="review-value" id="rvFlv">—</span>
+                </div>
+              </div>
+
+              <!-- Special notes -->
+              <div class="mb-3">
+                <label class="form-label" for="specialNotes">
+                  Design notes or special requests
+                  <span style="color:var(--text-light); font-weight:400;"> (optional)</span>
+                </label>
+                <textarea
+                  class="form-control"
+                  id="specialNotes"
+                  rows="3"
+                  placeholder="e.g. Pink and gold theme, 'Happy Birthday Sarah', fondant flowers, allergies..."
+                  aria-describedby="notesHint"
+                ></textarea>
+                <div id="notesHint" style="font-size:0.73rem; color:var(--text-light); margin-top:0.3rem;">
+                  The more detail you give us, the better we can deliver your vision.
+                </div>
+              </div>
+
+              <!-- Logging notice -->
+              <div class="logging-notice" role="note" aria-label="How your order is processed">
+                <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+                <span>
+                  Submitting logs your order to the bakery's
+                  <strong>Google Sheets tracker</strong> automatically —
+                  then routes you to WhatsApp to confirm details and pricing.
+                </span>
+              </div>
+
+              <div class="form-nav">
+                <button type="button" class="btn-back" onclick="prevStep(4)" aria-label="Back to step 3">
+                  <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back
+                </button>
+                <button
+                  type="button"
+                  class="btn-next btn-submit-order"
+                  id="submitBtn"
+                  onclick="handleSubmit()"
+                  aria-label="Submit order — logs to tracker and opens WhatsApp"
+                >
+                  <i class="fab fa-whatsapp me-1" aria-hidden="true"></i> Send My Order
+                </button>
+              </div>
+
+            </div>
+            <!-- /STEP 4 -->
+
+          </div>
+          <!-- /FORM BODY -->
+
+        </div>
+        <!-- /ORDER CARD -->
+
+      </div>
+    </div>
+  </section>
+  <!-- /ORDER FORM SECTION -->
+
+  <!-- ═══ SUCCESS SCREEN ═══ -->
+  <section
+    id="success-screen"
+    aria-label="Order submitted successfully"
+    aria-live="polite"
+    tabindex="-1"
+  >
+    <div class="container">
+      <div class="success-card">
+
+        <!-- Header -->
+        <div class="success-header">
+          <div class="success-icon-ring" aria-hidden="true">✅</div>
+          <div class="success-h">Order Received!</div>
+          <div class="success-p" id="successSub">
+            Logged to tracker · WhatsApp opening shortly
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="success-body">
+
+          <!-- Google Sheets confirmation -->
+          <div class="sheets-confirm" role="status" aria-label="Your order has been logged">
+            <div class="sheets-icon-box" aria-hidden="true">
+              <i class="fa-solid fa-table-cells-large"></i>
+            </div>
+            <div>
+              <div class="sheets-confirm-main">
+                Saved to Order Tracker
+                <span class="sheets-confirm-sub">
+                  Your order is in the bakery's Google Sheets log. Reference stored automatically.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order summary on success screen -->
+          <div class="review-summary mb-3" role="region" aria-label="Your submitted order">
+            <div class="review-row">
+              <span class="review-key">Ref</span>
+              <span class="review-value">
+                <span class="order-ref-tag" id="scRef">SL-XXXXXX</span>
+              </span>
+            </div>
+            <div class="review-row">
+              <span class="review-key">Customer</span>
+              <span class="review-value" id="scName">—</span>
+            </div>
+            <div class="review-row">
+              <span class="review-key">Occasion</span>
+              <span class="review-value" id="scOcc">—</span>
+            </div>
+            <div class="review-row">
+              <span class="review-key">Size</span>
+              <span class="review-value" id="scSize">—</span>
+            </div>
+            <div class="review-row">
+              <span class="review-key">Flavour</span>
+              <span class="review-value" id="scFlv">—</span>
+            </div>
+          </div>
+
+          <!-- WhatsApp countdown -->
+          <button
+            type="button"
+            class="wa-countdown-btn"
+            id="waBtn"
+            onclick="openWhatsApp()"
+            aria-label="Open WhatsApp to confirm your order"
+          >
+            <i class="fab fa-whatsapp wa-icon-xl" aria-hidden="true"></i>
+            <div class="wa-cd-text">
+              <div class="wa-cd-title">Opening WhatsApp...</div>
+              <div class="wa-cd-sub" id="cdSub">
+                Tap to open now · Auto-opens in <span id="cdNum">5</span>s
+              </div>
+            </div>
+            <div class="cd-bubble" id="cdBubble" aria-hidden="true">5</div>
+          </button>
+
+        </div>
+        <!-- /BODY -->
+
+      </div>
+    </div>
+  </section>
+  <!-- /SUCCESS SCREEN -->
+
+</main>
+
+<!-- LOADING OVERLAY -->
+<div
+  class="loading-overlay"
+  id="loadingOverlay"
+  role="status"
+  aria-live="polite"
+  aria-label="Submitting your order, please wait"
+>
+  <div class="loader-ring" aria-hidden="true"></div>
+  <div class="loading-main-txt">Logging your order...</div>
+  <div class="loading-sub-txt">
+    <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+    Saving to order tracker
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT BUTTON -->
+<a
+  href="https://wa.me/17587235872?text=Hi%2C+I%27d+like+to+order+a+custom+cake+%F0%9F%8E%82"
+  class="wa-float"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat with Sweet Layers on WhatsApp"
+>
+  <i class="fab fa-whatsapp" aria-hidden="true"></i>
+</a>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p>&copy; 2025 Sweet Layers Bakery · Custom Cakes · Saint Lucia</p>
+    <p>
+      Built by <a href="https://jamalinks758.github.io/jamalinks/" target="_blank" rel="noopener noreferrer">JAMALINKS</a>
+      &nbsp;·&nbsp; Powered by WhatsApp + Google Sheets
+    </p>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   JAMALINKS SMART ORDER SYSTEM
+   Google Sheets Integration + WhatsApp Routing
+   Version 1.0
+
+   ╔══════════════════════════════════════════════════════╗
+   ║  CLIENT CONFIGURATION — Update for each client       ║
+   ╠══════════════════════════════════════════════════════╣
+   ║                                                      ║
+   ║  1. APPS_SCRIPT_URL                                  ║
+   ║     Paste the Google Apps Script Web App URL here    ║
+   ║     (See apps-script.js for setup instructions)      ║
+   ║                                                      ║
+   ║  2. WHATSAPP_NUMBER                                  ║
+   ║     Client's WhatsApp in international format        ║
+   ║     No + or spaces. e.g. 17581234567                 ║
+   ║                                                      ║
+   ║  3. ORDER_PREFIX                                     ║
+   ║     Short code for the business (e.g. SL, BB, DG)   ║
+   ║                                                      ║
+   ╚══════════════════════════════════════════════════════╝
+════════════════════════════════════════════════════════════ */
+
+const CONFIG = {
+  APPS_SCRIPT_URL:  'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE',
+  WHATSAPP_NUMBER:  '17587235872',   // Sweet Layers demo number
+  ORDER_PREFIX:     'SL',
+  COUNTDOWN_SEC:    5
+};
+
+/* ── STATE ─────────────────────────────────────── */
+let currentStep  = 1;
+let orderRef     = '';
+let waUrl        = '';
+let cdInterval   = null;
+
+/* ── INIT ──────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  AOS.init({ once: true, offset: 30, duration: 580 });
+  initTheme();
+  orderRef = genRef();
+  document.getElementById('displayRef').textContent = orderRef;
+});
+
+/* ── THEME ─────────────────────────────────────── */
+function initTheme() {
+  const hour  = new Date().getHours();
+  const auto  = (hour >= 18 || hour < 6) ? 'dark' : 'light';
+  const saved = localStorage.getItem('jl-sl-theme');
+  applyTheme(saved || auto);
+}
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  const icon  = document.getElementById('themeIcon');
+  const label = document.getElementById('themeLabel');
+  if (t === 'dark') {
+    icon.className  = 'fa-regular fa-sun';
+    label.textContent = 'Light';
+  } else {
+    icon.className  = 'fa-regular fa-moon';
+    label.textContent = 'Dark';
+  }
+  localStorage.setItem('jl-sl-theme', t);
+}
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  applyTheme(cur === 'dark' ? 'light' : 'dark');
+});
+
+/* ── ORDER REFERENCE ───────────────────────────── */
+function genRef() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let r = CONFIG.ORDER_PREFIX + '-';
+  for (let i = 0; i < 6; i++) r += chars[Math.floor(Math.random() * chars.length)];
+  return r;
+}
+
+/* ── STEP METADATA ─────────────────────────────── */
+const STEPS = {
+  1: ['Your Details',    'Step 1 of 4 · Tell us who\'s ordering'],
+  2: ['Choose Occasion', 'Step 2 of 4 · What are we celebrating?'],
+  3: ['Cake Details',    'Step 3 of 4 · Size and flavour'],
+  4: ['Review & Submit', 'Step 4 of 4 · Confirm your order']
+};
+
+/* ── NAVIGATE STEPS ────────────────────────────── */
+function goTo(step) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + step).classList.add('active');
+
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.classList.remove('active', 'completed');
+    dot.removeAttribute('aria-current');
+    if (i < step)  { dot.classList.add('completed'); }
+    if (i === step){ dot.classList.add('active'); dot.setAttribute('aria-current', 'step'); }
+  }
+  for (let i = 1; i <= 3; i++) {
+    document.getElementById('line-' + i).classList.toggle('completed', i < step);
+  }
+
+  document.getElementById('stepTitle').textContent    = STEPS[step][0];
+  document.getElementById('stepSubtitle').textContent = STEPS[step][1];
+  currentStep = step;
+
+  // Smooth scroll to form top
+  document.getElementById('order-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function nextStep(from) {
+  if (!validate(from)) return;
+  if (from === 3) fillReview();
+  goTo(from + 1);
+}
+
+function prevStep(from) {
+  goTo(from - 1);
+}
+
+/* ── VALIDATION ────────────────────────────────── */
+function validate(step) {
+  let ok = true;
+
+  function setErr(inputId, errId, bad) {
+    const inp = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (bad) {
+      err && err.classList.add('show');
+      inp && inp.classList.add('has-error');
+      inp && inp.setAttribute('aria-invalid', 'true');
+      if (ok && inp) inp.focus();
+      ok = false;
+    } else {
+      err && err.classList.remove('show');
+      inp && inp.classList.remove('has-error');
+      inp && inp.removeAttribute('aria-invalid');
+    }
+  }
+
+  if (step === 1) {
+    const name  = (document.getElementById('customerName').value  || '').trim();
+    const phone = (document.getElementById('customerPhone').value || '').trim();
+    setErr('customerName',  'nameErr',  name.length  < 2);
+    setErr('customerPhone', 'phoneErr', phone.length < 6);
+  }
+
+  if (step === 2) {
+    const sel = document.querySelector('input[name="occasion"]:checked');
+    const err = document.getElementById('occErr');
+    if (!sel) { err.classList.add('show'); ok = false; }
+    else       { err.classList.remove('show'); }
+  }
+
+  if (step === 3) {
+    const sz  = document.querySelector('input[name="size"]:checked');
+    const fl  = document.querySelector('input[name="flavour"]:checked');
+    const szE = document.getElementById('sizeErr');
+    const flE = document.getElementById('flvErr');
+    if (!sz) { szE.classList.add('show'); ok = false; }
+    else      { szE.classList.remove('show'); }
+    if (!fl) { flE.classList.add('show'); ok = false; }
+    else      { flE.classList.remove('show'); }
+  }
+
+  return ok;
+}
+
+/* ── FILL REVIEW SCREEN ────────────────────────── */
+function fillReview() {
+  document.getElementById('displayRef').textContent = orderRef;
+  document.getElementById('rvName').textContent  = document.getElementById('customerName').value.trim();
+  document.getElementById('rvPhone').textContent = document.getElementById('customerPhone').value.trim();
+  document.getElementById('rvOcc').textContent   = document.querySelector('input[name="occasion"]:checked')?.value || '—';
+  document.getElementById('rvSize').textContent  = document.querySelector('input[name="size"]:checked')?.value    || '—';
+  document.getElementById('rvFlv').textContent   = document.querySelector('input[name="flavour"]:checked')?.value || '—';
+}
+
+/* ── BUILD WHATSAPP MESSAGE ────────────────────── */
+function buildWaMsg(d) {
+  return encodeURIComponent(
+    `🎂 *CAKE ORDER — Sweet Layers*\n` +
+    `━━━━━━━━━━━━━━━━━\n` +
+    `📋 *Order Ref:*  ${d.orderRef}\n` +
+    `👤 *Name:*       ${d.customerName}\n` +
+    `📱 *WhatsApp:*   ${d.customerPhone}\n\n` +
+    `🎉 *Occasion:*   ${d.occasion}\n` +
+    `📏 *Size:*       ${d.size}\n` +
+    `🍰 *Flavour:*    ${d.flavour}\n` +
+    `📝 *Notes:*      ${d.specialNotes || 'None'}\n` +
+    `━━━━━━━━━━━━━━━━━\n` +
+    `✅ Order auto-logged. Please confirm details and share pricing. Thank you! 🙏`
+  );
+}
+
+/* ── SUBMIT TO GOOGLE SHEETS ───────────────────────
+   Uses no-cors: request IS sent, response is opaque.
+   Order is NEVER lost — WhatsApp opens regardless.
+─────────────────────────────────────────────────── */
+async function submitToSheets(data) {
+  if (
+    !CONFIG.APPS_SCRIPT_URL ||
+    CONFIG.APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'
+  ) {
+    console.warn(
+      '[JAMALINKS] ⚠️  Apps Script URL not set.\n' +
+      'Set CONFIG.APPS_SCRIPT_URL to your deployed Google Apps Script URL.\n' +
+      'See apps-script.js for full setup instructions.\n' +
+      'Order will still go to WhatsApp.'
+    );
+    return;
+  }
+
+  try {
+    await fetch(CONFIG.APPS_SCRIPT_URL, {
+      method:  'POST',
+      mode:    'no-cors', // Required — allows cross-origin without CORS preflight
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(data)
+    });
+    console.log('[JAMALINKS] ✅ Order submitted to Google Sheets:', data.orderRef);
+  } catch (err) {
+    // Non-fatal. Order still routes to WhatsApp.
+    console.warn('[JAMALINKS] Sheet log failed (non-fatal). WhatsApp still opens.', err.message);
+  }
+}
+
+/* ── MAIN SUBMIT HANDLER ───────────────────────── */
+async function handleSubmit() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+
+  const orderData = {
+    orderRef:      orderRef,
+    customerName:  document.getElementById('customerName').value.trim(),
+    customerPhone: document.getElementById('customerPhone').value.trim(),
+    occasion:      document.querySelector('input[name="occasion"]:checked')?.value || '',
+    size:          document.querySelector('input[name="size"]:checked')?.value     || '',
+    flavour:       document.querySelector('input[name="flavour"]:checked')?.value  || '',
+    specialNotes:  document.getElementById('specialNotes').value.trim(),
+    timestamp:     new Date().toISOString(),
+    source:        'JAMALINKS Order Form — Sweet Layers Demo'
+  };
+
+  // Build WhatsApp URL immediately (synchronous, no async risk)
+  waUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${buildWaMsg(orderData)}`;
+
+  // Show loading overlay
+  document.getElementById('loadingOverlay').classList.add('active');
+
+  // Fire sheet submission (non-blocking)
+  await submitToSheets(orderData);
+
+  // Minimum visible loading: 1.8s (good UX — shows the logging is happening)
+  await new Promise(r => setTimeout(r, 1800));
+
+  // Hide loading
+  document.getElementById('loadingOverlay').classList.remove('active');
+  btn.disabled = false;
+
+  // Show success
+  showSuccess(orderData);
+}
+
+/* ── SUCCESS SCREEN ────────────────────────────── */
+function showSuccess(data) {
+  document.getElementById('order-section').style.display  = 'none';
+  const sc = document.getElementById('success-screen');
+  sc.style.display = 'block';
+
+  // Populate success fields
+  document.getElementById('scRef').textContent  = data.orderRef;
+  document.getElementById('scName').textContent = data.customerName;
+  document.getElementById('scOcc').textContent  = data.occasion;
+  document.getElementById('scSize').textContent = data.size;
+  document.getElementById('scFlv').textContent  = data.flavour;
+
+  // Focus success screen for screen readers
+  sc.focus();
+
+  // Countdown
+  let secs = CONFIG.COUNTDOWN_SEC;
+  document.getElementById('cdNum').textContent    = secs;
+  document.getElementById('cdBubble').textContent = secs;
+
+  cdInterval = setInterval(() => {
+    secs--;
+    document.getElementById('cdNum').textContent    = secs;
+    document.getElementById('cdBubble').textContent = secs;
+    if (secs <= 0) {
+      clearInterval(cdInterval);
+      openWhatsApp();
+    }
+  }, 1000);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── OPEN WHATSAPP ─────────────────────────────── */
+function openWhatsApp() {
+  if (cdInterval) clearInterval(cdInterval);
+  document.getElementById('cdSub').textContent    = 'Opening WhatsApp now...';
+  document.getElementById('cdBubble').textContent = '→';
+  window.open(waUrl, '_blank');
+}
+</script>
+
+</body>
+</html>
