@@ -1597,17 +1597,17 @@ function fillReview() {
 /* ── BUILD WHATSAPP MESSAGE ────────────────────── */
 function buildWaMsg(d) {
   return encodeURIComponent(
-    `🎂 *CAKE ORDER — Sweet Layers*\n` +
-    `━━━━━━━━━━━━━━━━━\n` +
-    `📋 *Order Ref:*  ${d.orderRef}\n` +
-    `👤 *Name:*       ${d.customerName}\n` +
-    `📱 *WhatsApp:*   ${d.customerPhone}\n\n` +
-    `🎉 *Occasion:*   ${d.occasion}\n` +
-    `📏 *Size:*       ${d.size}\n` +
-    `🍰 *Flavour:*    ${d.flavour}\n` +
-    `📝 *Notes:*      ${d.specialNotes || 'None'}\n` +
-    `━━━━━━━━━━━━━━━━━\n` +
-    `✅ Order auto-logged. Please confirm details and share pricing. Thank you! 🙏`
+    `*CAKE ORDER - Sweet Layers*\n` +
+    `-------------------------\n` +
+    `Order Ref:  ${d.orderRef}\n` +
+    `Name:       ${d.customerName}\n` +
+    `WhatsApp:   ${d.customerPhone}\n\n` +
+    `Occasion:   ${d.occasion}\n` +
+    `Size:       ${d.size}\n` +
+    `Flavour:    ${d.flavour}\n` +
+    `Notes:      ${d.specialNotes || 'None'}\n` +
+    `-------------------------\n` +
+    `Order auto-logged. Please confirm details and pricing. Thank you!`
   );
 }
 
