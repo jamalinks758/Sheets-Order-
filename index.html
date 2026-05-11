@@ -1611,39 +1611,33 @@ function buildWaMsg(d) {
   );
 }
 
-/* ── SUBMIT TO GOOGLE SHEETS ───────────────────────
-   Uses no-cors: request IS sent, response is opaque.
-   Order is NEVER lost — WhatsApp opens regardless.
-─────────────────────────────────────────────────── */
-async function submitToSheets(data) {
+/* ── SUBMIT TO GOOGLE SHEETS (Fire & Forget) ────────────
+   Uses text/plain — only simple content types work with
+   no-cors. Apps Script parses the JSON body on its end.
+   We do NOT await this. WhatsApp never waits for the sheet.
+─────────────────────────────────────────────────────── */
+function submitToSheets(data) {
   if (
     !CONFIG.APPS_SCRIPT_URL ||
     CONFIG.APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'
   ) {
-    console.warn(
-      '[JAMALINKS] ⚠️  Apps Script URL not set.\n' +
-      'Set CONFIG.APPS_SCRIPT_URL to your deployed Google Apps Script URL.\n' +
-      'See apps-script.js for full setup instructions.\n' +
-      'Order will still go to WhatsApp.'
-    );
+    console.warn('[JAMALINKS] Apps Script URL not set. Order going to WhatsApp only.');
     return;
   }
 
-  try {
-    await fetch(CONFIG.APPS_SCRIPT_URL, {
-      method:  'POST',
-      mode:    'no-cors', // Required — allows cross-origin without CORS preflight
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(data)
-    });
-    console.log('[JAMALINKS] ✅ Order submitted to Google Sheets:', data.orderRef);
-  } catch (err) {
-    // Non-fatal. Order still routes to WhatsApp.
-    console.warn('[JAMALINKS] Sheet log failed (non-fatal). WhatsApp still opens.', err.message);
-  }
+  // Fire and forget — no await, no blocking
+  fetch(CONFIG.APPS_SCRIPT_URL, {
+    method:  'POST',
+    mode:    'no-cors',
+    headers: { 'Content-Type': 'text/plain' }, // ← KEY FIX: text/plain bypasses CORS preflight
+    body:    JSON.stringify(data)
+  }).catch(err => {
+    // Non-fatal. WhatsApp still opens.
+    console.warn('[JAMALINKS] Sheet log error (non-fatal):', err.message);
+  });
 }
 
-/* ── MAIN SUBMIT HANDLER ───────────────────────── */
+/* ── MAIN SUBMIT HANDLER ────────────────────────────── */
 async function handleSubmit() {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
@@ -1660,24 +1654,22 @@ async function handleSubmit() {
     source:        'JAMALINKS Order Form — Sweet Layers Demo'
   };
 
-  // Build WhatsApp URL immediately (synchronous, no async risk)
+  // Build WhatsApp URL immediately — synchronous, instant
   waUrl = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${buildWaMsg(orderData)}`;
+
+  // Fire sheet submission — does NOT block anything below
+  submitToSheets(orderData);
 
   // Show loading overlay
   document.getElementById('loadingOverlay').classList.add('active');
 
-  // Fire sheet submission (non-blocking)
-  await submitToSheets(orderData);
+  // 900ms only — enough to show the logging state, not enough to frustrate
+  await new Promise(r => setTimeout(r, 900));
 
-  // Minimum visible loading: 1.8s (good UX — shows the logging is happening)
-  await new Promise(r => setTimeout(r, 1800));
-
-  // Hide loading
+  // Done
   document.getElementById('loadingOverlay').classList.remove('active');
-  btn.disabled = false;
-
-  // Show success
   showSuccess(orderData);
+  // Note: btn stays disabled — order is submitted, no re-submission allowed
 }
 
 /* ── SUCCESS SCREEN ────────────────────────────── */
